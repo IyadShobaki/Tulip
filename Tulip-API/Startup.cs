@@ -38,6 +38,15 @@ namespace Tulip_API
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            // Configure CORS "Cross Origin Resource Sharing" (for global interaction)- Iyad
+            services.AddCors(o =>
+            {
+                o.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+
             // Add Swagger  -- Iyad
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo 
@@ -86,6 +95,9 @@ namespace Tulip_API
             //app.UseStaticFiles(); // we don't need static files like js/css in the API, 
             // becasue the API doesn't have an interface - Iyad
             // Delete the wwwroot, Areas and Pages folders
+
+            // Configure CORS "Cross Origin Resource Sharing" - Iyad
+            app.UseCors("CorsPolicy");
 
             app.UseRouting();
 
