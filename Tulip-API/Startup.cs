@@ -17,6 +17,8 @@ using System.Reflection;
 using System.IO;
 using Tulip_API.Contracts;
 using Tulip_API.Services;
+using AutoMapper;
+using Tulip_API.Mappings;
 
 namespace Tulip_API
 {
@@ -46,6 +48,9 @@ namespace Tulip_API
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
+
+            // Setup AutoMapper -- Iyad
+            services.AddAutoMapper(typeof(Maps));
 
             // Add Swagger  -- Iyad
             services.AddSwaggerGen(c => {
