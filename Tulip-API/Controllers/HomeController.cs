@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Tulip_API.Contracts;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,6 +16,12 @@ namespace Tulip_API.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
+        private readonly ILoggerService _logger;
+
+        public HomeController(ILoggerService logger)
+        {
+            _logger = logger;
+        }
         /// <summary>
         /// Gets values
         /// </summary>
@@ -23,6 +30,8 @@ namespace Tulip_API.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            _logger.LogInfo("Accessed Home Controller");
+
             return new string[] { "value1", "value2" };
         }
 
@@ -35,6 +44,7 @@ namespace Tulip_API.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
+            _logger.LogDebug("Got A Value");
             return "value";
         }
 
@@ -42,6 +52,7 @@ namespace Tulip_API.Controllers
         [HttpPost]
         public void Post([FromBody] string value)
         {
+            _logger.LogError("This is an error");
         }
 
         // PUT api/<HomeController>/5
@@ -54,6 +65,7 @@ namespace Tulip_API.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _logger.LogWarn("This is a warning");
         }
     }
 }
