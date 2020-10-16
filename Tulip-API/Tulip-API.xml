@@ -11,8 +11,15 @@
         </member>
         <member name="M:Tulip_API.Controllers.HomeController.Get">
             <summary>
-            Get a value
+            Gets values
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Tulip_API.Controllers.HomeController.Get(System.Int32)">
+            <summary>
+            Gets a value
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
     </members>

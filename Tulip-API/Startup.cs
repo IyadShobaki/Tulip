@@ -15,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.IO;
+using Tulip_API.Contracts;
+using Tulip_API.Services;
 
 namespace Tulip_API
 {
@@ -50,6 +52,9 @@ namespace Tulip_API
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+
+            // Setup nLog system
+            services.AddSingleton<ILoggerService, LoggerService>();
 
             // change from AddRazorPages to AddControllers - Iyad
             //services.AddRazorPages();
