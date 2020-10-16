@@ -32,7 +32,9 @@ namespace Tulip_API
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddRazorPages();
+            // change from AddRazorPages to AddControllers - Iyad
+            //services.AddRazorPages();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,7 +53,9 @@ namespace Tulip_API
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            //app.UseStaticFiles(); // we don't need static files like js/css in the API, 
+            // becasue the API doesn't have an interface - Iyad
+            // Delete the wwwroot, Areas and Pages folders
 
             app.UseRouting();
 
@@ -60,7 +64,8 @@ namespace Tulip_API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                //endpoints.MapRazorPages(); 
+                endpoints.MapControllers(); // -- Iyad
             });
         }
     }
