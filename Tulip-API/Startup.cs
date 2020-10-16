@@ -12,6 +12,9 @@ using Tulip_API.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.IO;
 
 namespace Tulip_API
 {
@@ -32,6 +35,22 @@ namespace Tulip_API
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // Add Swagger  -- Iyad
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { Title="Tulip Clothing Store API",
+                    Version= "v1",
+                    Description = "This is an educational API for Tulip Clothing Store"
+                });
+
+                // Adding XML file to swagger
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //D:\C#Projects\Tulip\Tulip-API\Tulip-API.xml (API Properties -> Build)
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+
             // change from AddRazorPages to AddControllers - Iyad
             //services.AddRazorPages();
             services.AddControllers();
@@ -51,6 +70,12 @@ namespace Tulip_API
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSwagger(); // - Iyad
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tulip Clothing Store API");
+                c.RoutePrefix = "";
+            });
 
             app.UseHttpsRedirection();
             //app.UseStaticFiles(); // we don't need static files like js/css in the API, 
