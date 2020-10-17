@@ -70,6 +70,9 @@ namespace Tulip_API
             // Setup nLog system
             services.AddSingleton<ILoggerService, LoggerService>();
 
+            // Add Inventory Repository and Service to DI -- Iyad
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
+
             // change from AddRazorPages to AddControllers - Iyad
             //services.AddRazorPages();
             services.AddControllers();

@@ -7,7 +7,7 @@ namespace Tulip_API.Contracts
 {
     // Generic (Its function relative to whatever class we choose
     // from the Data folder
-    interface IRepositoryBase<T> where T : class 
+    public interface IRepositoryBase<T> where T : class 
     {
         Task<IList<T>> FindAll();
         Task<T> FindById(int id);
