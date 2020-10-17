@@ -27,5 +27,11 @@
             Endpoint used to interact with the Inventories in the Tulip Clothing Store's database
             </summary>
         </member>
+        <member name="M:Tulip_API.Controllers.InventoriesController.GetInventories">
+            <summary>
+            Get All Inventories
+            </summary>
+            <returns>List of Inventory</returns>
+        </member>
     </members>
 </doc>
