@@ -71,7 +71,7 @@ namespace Tulip_API
             services.AddSingleton<ILoggerService, LoggerService>();
 
             // Add Inventory Repository and Service to DI -- Iyad
-            services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             // change from AddRazorPages to AddControllers - Iyad
             //services.AddRazorPages();

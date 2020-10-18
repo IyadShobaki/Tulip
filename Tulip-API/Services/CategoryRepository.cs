@@ -8,36 +8,36 @@ using Tulip_API.Data;
 
 namespace Tulip_API.Services
 {
-    public class InventoryRepository : IInventoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly ApplicationDbContext _db;
 
-        public InventoryRepository(ApplicationDbContext db)
+        public CategoryRepository(ApplicationDbContext db)
         {
             _db = db;
         }
-        public async Task<bool> Create(Inventory entity)
+        public async Task<bool> Create(Category entity)
         {
-            await _db.Inventories.AddAsync(entity);
+            await _db.Categories.AddAsync(entity);
             return await Save();
 
         }
 
-        public async Task<bool> Delete(Inventory entity)
+        public async Task<bool> Delete(Category entity)
         {
-            _db.Inventories.Remove(entity);
+            _db.Categories.Remove(entity);
             return await Save();
         }
 
-        public async Task<IList<Inventory>> FindAll()
+        public async Task<IList<Category>> FindAll()
         {
-            var inventories = await _db.Inventories.ToListAsync();
+            var inventories = await _db.Categories.ToListAsync();
             return inventories;
         }
 
-        public async Task<Inventory> FindById(int id)
+        public async Task<Category> FindById(int id)
         {
-            var inventory = await _db.Inventories.FindAsync(id);
+            var inventory = await _db.Categories.FindAsync(id);
             return inventory;
         }
 
@@ -48,9 +48,9 @@ namespace Tulip_API.Services
             return changes > 0;
         }
 
-        public async Task<bool> Update(Inventory entity)
+        public async Task<bool> Update(Category entity)
         {
-            _db.Inventories.Update(entity);
+            _db.Categories.Update(entity);
             return await Save();
         }
     }

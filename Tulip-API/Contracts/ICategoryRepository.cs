@@ -6,7 +6,7 @@ using Tulip_API.Data;
 
 namespace Tulip_API.Contracts
 {
-    public interface IInventoryRepository : IRepositoryBase<Inventory>
+    public interface ICategoryRepository : IRepositoryBase<Category>
     {
     }
 }

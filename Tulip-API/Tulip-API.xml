@@ -4,6 +4,39 @@
         <name>Tulip-API</name>
     </assembly>
     <members>
+        <member name="T:Tulip_API.Controllers.CategoriesController">
+            <summary>
+            Endpoint used to interact with the Categories in the Tulip Clothing Store's database
+            </summary>
+        </member>
+        <member name="M:Tulip_API.Controllers.CategoriesController.GetCategories">
+            <summary>
+            Get All Categories
+            </summary>
+            <returns>List of Category</returns>
+        </member>
+        <member name="M:Tulip_API.Controllers.CategoriesController.GetCategory(System.Int32)">
+            <summary>
+            Get Category by Id
+            </summary>
+            <param name="id"></param>
+            <returns>An Category's record</returns>
+        </member>
+        <member name="M:Tulip_API.Controllers.CategoriesController.Create(Tulip_API.DTOs.CategoryCreateDTO)">
+            <summary>
+            Insert new category record
+            </summary>
+            <param name="categoryDTO"></param>
+            <returns>The record that has been inserted</returns>
+        </member>
+        <member name="M:Tulip_API.Controllers.CategoriesController.Update(System.Int32,Tulip_API.DTOs.CategoryUpdateDTO)">
+            <summary>
+            Update existing category record
+            </summary>
+            <param name="id"></param>
+            <param name="categoryDTO"></param>
+            <returns>No content to return</returns>        
+        </member>
         <member name="T:Tulip_API.Controllers.HomeController">
             <summary>
             This is test API controller
@@ -21,31 +54,6 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
-        </member>
-        <member name="T:Tulip_API.Controllers.InventoriesController">
-            <summary>
-            Endpoint used to interact with the Inventories in the Tulip Clothing Store's database
-            </summary>
-        </member>
-        <member name="M:Tulip_API.Controllers.InventoriesController.GetInventories">
-            <summary>
-            Get All Inventories
-            </summary>
-            <returns>List of Inventory</returns>
-        </member>
-        <member name="M:Tulip_API.Controllers.InventoriesController.GetInventory(System.Int32)">
-            <summary>
-            Get Inventory by Id
-            </summary>
-            <param name="id"></param>
-            <returns>An Inventory's record</returns>
-        </member>
-        <member name="M:Tulip_API.Controllers.InventoriesController.Create(Tulip_API.DTOs.InventoryCreateDTO)">
-            <summary>
-            Insert new inventory record
-            </summary>
-            <param name="inventoryDTO"></param>
-            <returns>The record that has been inserted</returns>
         </member>
     </members>
 </doc>

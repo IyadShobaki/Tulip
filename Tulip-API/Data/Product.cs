@@ -17,7 +17,7 @@ namespace Tulip_API.Data
         public bool IsTaxable { get; set; }
         public bool? Sex { get; set; } // ? to allow nulls
 
-        // Allow for us to know this product follow which inventory record
-        public virtual Inventory Inventory { get; set; }
+        // Allow for us to know this product follow which category
+        public virtual Category Category { get; set; }
     }
 }

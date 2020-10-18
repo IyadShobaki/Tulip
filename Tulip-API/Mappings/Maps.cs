@@ -12,8 +12,9 @@ namespace Tulip_API.Mappings
     {
         public Maps()
         {
-            CreateMap<Inventory, InventoryDTO>().ReverseMap();
-            CreateMap<Inventory, InventoryCreateDTO>().ReverseMap();
+            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<Category, CategoryCreateDTO>().ReverseMap();
+            CreateMap<Category, CategoryUpdateDTO>().ReverseMap();
             CreateMap<Product, ProductDTO>().ReverseMap();
 
         }

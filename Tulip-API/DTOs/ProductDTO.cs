@@ -16,9 +16,7 @@ namespace Tulip_API.DTOs
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsTaxable { get; set; }
-        public bool? Sex { get; set; } // ? to allow nulls
 
-        // Allow for us to know this product follow which inventory record
-        public virtual InventoryDTO Inventory { get; set; }
+        public virtual CategoryDTO Category { get; set; }
     }
 }
