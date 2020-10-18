@@ -33,5 +33,19 @@
             </summary>
             <returns>List of Inventory</returns>
         </member>
+        <member name="M:Tulip_API.Controllers.InventoriesController.GetInventory(System.Int32)">
+            <summary>
+            Get Inventory by Id
+            </summary>
+            <param name="id"></param>
+            <returns>An Inventory's record</returns>
+        </member>
+        <member name="M:Tulip_API.Controllers.InventoriesController.Create(Tulip_API.DTOs.InventoryCreateDTO)">
+            <summary>
+            Insert new inventory record
+            </summary>
+            <param name="inventoryDTO"></param>
+            <returns>The record that has been inserted</returns>
+        </member>
     </members>
 </doc>

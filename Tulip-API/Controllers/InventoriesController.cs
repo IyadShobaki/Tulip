@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tulip_API.Contracts;
+using Tulip_API.Data;
 using Tulip_API.DTOs;
 
 namespace Tulip_API.Controllers
@@ -21,7 +22,7 @@ namespace Tulip_API.Controllers
         private readonly IInventoryRepository _inventoryRepository;
         private readonly ILoggerService _logger;
         private readonly IMapper _mapper;
-
+        private string controllerName = "InventoriesController";
         public InventoriesController(IInventoryRepository inventoryRepository,
             ILoggerService logger,
             IMapper mapper)
@@ -42,17 +43,17 @@ namespace Tulip_API.Controllers
         {
             try
             {
-                _logger.LogInfo("Attempted Get All Inventories");
+                _logger.LogInfo($"{controllerName} - Attempted Get All Inventories");
                 var inventories = await _inventoryRepository.FindAll();
                 var response = _mapper.Map<IList<InventoryDTO>>(inventories);
-                _logger.LogInfo("Successfully got all Inventories");
+                _logger.LogInfo($"{controllerName} - Successfully got all Inventories");
                 return Ok(response);
             }
             catch (Exception ex)
             {
                 //_logger.LogError($"{ex.Message} - {ex.InnerException}");
                 //return StatusCode(500, "Something went wrong. Please contact the administrator"); // 500 something went wrong
-                return InternalError($"{ex.Message} - {ex.InnerException}");
+                return InternalError($"{controllerName} - {ex.Message} - {ex.InnerException}");
             }
         }
         /// <summary>
@@ -68,23 +69,61 @@ namespace Tulip_API.Controllers
         {
             try
             {
-                _logger.LogInfo($"Attempted to get Inventory with id:{id}");
+                _logger.LogInfo($"{controllerName} - Attempted to get Inventory with id:{id}");
                 var inventory = await _inventoryRepository.FindById(id);
                 if (inventory == null)
                 {
-                    _logger.LogWarn($"Inventory with id:{id} was not found");
+                    _logger.LogWarn($"{controllerName} - Inventory with id:{id} was not found");
                     return NotFound(); // 404
                 }
                 var response = _mapper.Map<InventoryDTO>(inventory);
-                _logger.LogInfo($"Successfully got Inventory with id:{id}");
+                _logger.LogInfo($"{controllerName} - Successfully got Inventory with id:{id}");
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                return InternalError($"{ex.Message} - {ex.InnerException}");
+                return InternalError($"{controllerName} - {ex.Message} - {ex.InnerException}");
             }
         }
+        /// <summary>
+        /// Insert new inventory record
+        /// </summary>
+        /// <param name="inventoryDTO"></param>
+        /// <returns>The record that has been inserted</returns>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Create([FromBody] InventoryCreateDTO inventoryDTO)
+        {
+            try
+            {
+                _logger.LogInfo($"{controllerName} - Inventory submission attempted");
+                if (inventoryDTO == null)
+                {
+                    _logger.LogWarn($"{controllerName} - Empty request was submitted");
+                    return BadRequest(ModelState);
+                }
+                if (!ModelState.IsValid) // Check the validations
+                {
+                    _logger.LogWarn($"{controllerName} - Inventory Data was incomplete");
+                    return BadRequest(ModelState);
+                }
+                var inventory = _mapper.Map<Inventory>(inventoryDTO);
+                var isSuccess = await _inventoryRepository.Create(inventory);
+                if (!isSuccess)
+                {
+                    return InternalError($"{controllerName} - Inventory Creation failed");
+                }
+                _logger.LogInfo($"{controllerName} - Inventory record successfully inserted");
+                return Created("Create", new { inventory });
+            }
+            catch (Exception ex)
+            {
 
+                return InternalError($"{controllerName} - {ex.Message} - {ex.InnerException}");
+            }
+        }
         private ObjectResult InternalError(string message)
         {
             _logger.LogError(message);
