@@ -19,6 +19,9 @@ using Tulip_API.Contracts;
 using Tulip_API.Services;
 using AutoMapper;
 using Tulip_API.Mappings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Tulip_API
 {
@@ -52,6 +55,24 @@ namespace Tulip_API
 
             // Setup AutoMapper -- Iyad
             services.AddAutoMapper(typeof(Maps));
+
+            // Configure JWT -- Iyad
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(o =>
+                {
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    };
+                });
+
+
 
             // Add Swagger  -- Iyad
             services.AddSwaggerGen(c => {
