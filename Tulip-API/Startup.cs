@@ -38,6 +38,7 @@ namespace Tulip_API
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()//options => options.SignIn.RequireConfirmedAccount = true) for email confirmation -- Iyad
+                .AddRoles<IdentityRole>() //-- Iyad
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Configure CORS "Cross Origin Resource Sharing" (for global interaction)- Iyad
@@ -82,7 +83,10 @@ namespace Tulip_API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+            IWebHostEnvironment env,
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -109,6 +113,9 @@ namespace Tulip_API
 
             // Configure CORS "Cross Origin Resource Sharing" - Iyad
             app.UseCors("CorsPolicy");
+
+            // Add admin user and roles
+            SeedData.Seed(userManager, roleManager).Wait();
 
             app.UseRouting();
 
