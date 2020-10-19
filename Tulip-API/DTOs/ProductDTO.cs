@@ -43,4 +43,25 @@ namespace Tulip_API.DTOs
         [Required]
         public int CategoryId { get; set; }
     }
+    public class ProductUpdateDTO
+    {
+        public int Id { get; set; }
+        [Required]
+        public string ProductName { get; set; }
+        [Required]
+        [StringLength(4000)]
+        public string Description { get; set; }
+        [Required]
+        public string ProductImage { get; set; }
+        [Required]
+        public decimal RetailPrice { get; set; }
+        [Required]
+        public int QuantityInStock { get; set; }
+        [Required]
+        public DateTime UpdatedDate { get; set; }
+        [Required]
+        public bool IsTaxable { get; set; }
+        [Required]
+        public int CategoryId { get; set; }
+    }
 }

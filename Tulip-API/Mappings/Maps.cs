@@ -17,6 +17,7 @@ namespace Tulip_API.Mappings
             CreateMap<Category, CategoryUpdateDTO>().ReverseMap();
             CreateMap<Product, ProductDTO>().ReverseMap();
             CreateMap<Product, ProductCreateDTO>().ReverseMap();
+            CreateMap<Product, ProductUpdateDTO>().ReverseMap();
 
         }
     }

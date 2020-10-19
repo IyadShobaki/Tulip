@@ -162,7 +162,7 @@ namespace Tulip_API.Controllers
                 {
                     return InternalError($"{location}: Updating category failed");
                 }
-                _logger.LogWarn($"{location}: Category with id: {id} successfully updated");
+                _logger.LogInfo($"{location}: Category with id: {id} successfully updated");
                 return NoContent(); // ok but no content to return
             }
             catch (Exception ex)
@@ -204,7 +204,7 @@ namespace Tulip_API.Controllers
                 {
                     return InternalError($"{location}: Deleting category failed");
                 }
-                _logger.LogWarn($"{location}: Category with id: {id} Successfully deleted");
+                _logger.LogInfo($"{location}: Category with id: {id} Successfully deleted");
                 return NoContent();
             }
             catch (Exception ex)

@@ -123,6 +123,96 @@ namespace Tulip_API.Controllers
                 return InternalError($"{location}: {ex.Message} - {ex.InnerException}");
             }
         }
+
+        /// <summary>
+        /// Update existing product record
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="productDTO"></param>
+        /// <returns>No content to return</returns>        
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Update(int id, [FromBody] ProductUpdateDTO productDTO)
+        {
+            var location = GetControllerActionNames();
+            try
+            {
+                _logger.LogInfo($"{location}: Product with id: {id} updated attempted");
+                if (id < 1 || productDTO == null || id != productDTO.Id)
+                {
+                    _logger.LogWarn($"{location}: Product updating failed (bad data)");
+                    return BadRequest();
+                }
+                var isProductExists = await _productRepository.IsExists(id);
+                if (!isProductExists)
+                {
+                    _logger.LogWarn($"{location}: Category with id: {id} was not found");
+                    return NotFound();
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarn($"{location}: Category data was incomplete");
+                    return BadRequest(ModelState);
+                }
+                var product = _mapper.Map<Product>(productDTO);
+                var isSuccess = await _productRepository.Update(product);
+                if (!isSuccess)
+                {
+                    return InternalError($"{location}: Updating product failed");
+                }
+                _logger.LogInfo($"{location}: Product with id: {id} successfully updated");
+                return NoContent(); // ok but no content to return
+            }
+            catch (Exception ex)
+            {
+                return InternalError($"{location}: {ex.Message} - {ex.InnerException}");
+            }
+        }
+
+        /// <summary>
+        /// Delete existing product record
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>No content to return</returns>        
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var location = GetControllerActionNames();
+            try
+            {
+                _logger.LogInfo($"{location}: Attempt to delete product with id: {id}");
+                if (id < 1)
+                {
+                    _logger.LogWarn($"{location}: Delete product with id: {id} failed (bad data)");
+                    return BadRequest();
+                }
+                var isProductExists = await _productRepository.IsExists(id);
+                if (!isProductExists)
+                {
+                    _logger.LogWarn($"{location}: Product with id: {id} was not found");
+                    return NotFound();
+                }
+                var product = await _productRepository.FindById(id);
+                var isSuccess = await _productRepository.Delete(product);
+                if (!isSuccess)
+                {
+                    return InternalError($"{location}: Deleting product failed");
+                }
+                _logger.LogInfo($"{location}: Product with id: {id} Successfully deleted");
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return InternalError($"{location}: {ex.Message} - {ex.InnerException}");
+            }
+        }
         private string GetControllerActionNames()
         {
             var controller = ControllerContext.ActionDescriptor.ControllerName;
