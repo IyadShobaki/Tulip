@@ -37,7 +37,7 @@ namespace Tulip_API
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>()//options => options.SignIn.RequireConfirmedAccount = true) for email confirmation -- Iyad
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Configure CORS "Cross Origin Resource Sharing" (for global interaction)- Iyad
