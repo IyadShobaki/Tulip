@@ -12,6 +12,7 @@ namespace Tulip_API.Contracts
         Task<IList<T>> FindAll();
         Task<T> FindById(int id);
         Task<bool> Create(T entity);
+        Task<bool> IsExists(int id);
         Task<bool> Update(T entity);
         Task<bool> Delete(T entity);
         Task<bool> Save();  // To commit the changes to the database

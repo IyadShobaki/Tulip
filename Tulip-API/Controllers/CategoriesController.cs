@@ -142,6 +142,12 @@ namespace Tulip_API.Controllers
                     _logger.LogWarn($"{controllerName} - Category updating failed (bad data)");
                     return BadRequest();
                 }
+                var isCategoryExists = await _categoryRepository.IsExists(id);
+                if (!isCategoryExists)
+                {
+                    _logger.LogWarn($"{controllerName} - Category with id: {id} was not found");
+                    return NotFound();
+                }
                 if (!ModelState.IsValid)
                 {
                     _logger.LogWarn($"{controllerName} - Category data was incomplete");
@@ -155,6 +161,47 @@ namespace Tulip_API.Controllers
                 }
                 _logger.LogWarn($"{controllerName} - Category with id: {id} successfully updated");
                 return NoContent(); // ok but no content to return
+            }
+            catch (Exception ex)
+            {
+                return InternalError($"{controllerName} - {ex.Message} - {ex.InnerException}");
+            }
+        }
+
+
+        /// <summary>
+        /// Delete existing category record
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>No content to return</returns>        
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                _logger.LogInfo($"{controllerName} - Attempt to delete category with id: {id}");
+                if (id < 1)
+                {
+                    _logger.LogWarn($"{controllerName} - Delete category with id: {id} failed (bad data)");
+                    return BadRequest();
+                }
+                var isCategoryExists = await _categoryRepository.IsExists(id);
+                if (!isCategoryExists)
+                {
+                    _logger.LogWarn($"{controllerName} - Category with id: {id} was not found");
+                    return NotFound();
+                }
+                var category = await _categoryRepository.FindById(id);  
+                var isSuccess = await _categoryRepository.Delete(category);
+                if (!isSuccess)
+                {
+                    return InternalError($"{controllerName} - Deleting category failed");
+                }
+                _logger.LogWarn($"{controllerName} - Category with id: {id} Successfully deleted");
+                return NoContent();
             }
             catch (Exception ex)
             {

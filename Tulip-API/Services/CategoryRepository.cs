@@ -41,6 +41,11 @@ namespace Tulip_API.Services
             return inventory;
         }
 
+        public async Task<bool> IsExists(int id)
+        {
+            return await _db.Categories.AnyAsync(c => c.Id == id);
+        }
+
         public async Task<bool> Save()
         {
             var changes = await _db.SaveChangesAsync();
