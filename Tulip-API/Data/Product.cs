@@ -15,7 +15,7 @@ namespace Tulip_API.Data
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsTaxable { get; set; }
-        public bool? Sex { get; set; } // ? to allow nulls
+        public int CategoryId { get; set; }
 
         // Allow for us to know this product follow which category
         public virtual Category Category { get; set; }
