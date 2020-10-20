@@ -9,5 +9,7 @@ namespace Tulip_BlazorUI.Contratcs
     public interface IAuthenticationRepository
     {
         Task<bool> Register(RegistrationModel registrationModel);
+        Task<bool> Login(LoginModel loginModel);
+        Task Logout();
     }
 }
