@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Tulip_BlazorUI.Contratcs;
+using Tulip_BlazorUI.Service;
 
 namespace Tulip_BlazorUI
 {
@@ -27,6 +29,8 @@ namespace Tulip_BlazorUI
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddHttpClient();  // -- Iyad 
+            services.AddTransient<IAuthenticationRepository, AuthenticationRepository>(); // -- Iyad 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

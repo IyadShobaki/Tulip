@@ -102,6 +102,13 @@
             <param name="id"></param>
             <returns>No content to return</returns>        
         </member>
+        <member name="M:Tulip_API.Controllers.UsersController.Register(Tulip_API.DTOs.UserDTO)">
+            <summary>
+            User Registeration Endpoint
+            </summary>
+            <param name="userDTO"></param>
+            <returns></returns>
+        </member>
         <member name="M:Tulip_API.Controllers.UsersController.Login(Tulip_API.DTOs.UserDTO)">
             <summary>
             User Login Endpoint

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tulip-API", "Tulip-API\Tulip-API.csproj", "{1B116D4D-7D69-407F-A7C7-6B13AED8E884}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tulip-BlazorUI", "Tulip-BlazorUI\Tulip-BlazorUI.csproj", "{1BE8A399-C6EA-48B0-8077-3B539D7E1E8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tulip-BlazorUI", "Tulip-BlazorUI\Tulip-BlazorUI.csproj", "{1BE8A399-C6EA-48B0-8077-3B539D7E1E8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
