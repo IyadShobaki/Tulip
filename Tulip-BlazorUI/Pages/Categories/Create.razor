@@ -1,0 +1,46 @@
+﻿@page "/categories/create"
+
+@inject ICategoryRepository _cateRepo
+@inject NavigationManager _navManager
+
+<h3>Create New Category</h3>
+
+@if (!isSuccess)
+{
+    <ErrorMessage Message="Something went wrong with creating attempt" />
+}
+
+<EditForm Model="Model" OnValidSubmit="CreateCategory">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="categoryname">Category Name</label>
+        <InputText @bind-Value="Model.CategoryName" class="form-control" id="categoryname" />
+    </div>
+    <button class="btn btn-primary" type="submit">
+        <span class="oi oi-pencil"></span>Create Category
+    </button>
+    <button class="btn btn-outline-secondary" @onclick="BackToCategories">
+        <span class="oi oi-media-skip-backward"></span> Back To Categories
+    </button>
+</EditForm>
+
+@code {
+    private Category Model = new Category();
+    private bool isSuccess = true;
+
+    private async Task CreateCategory()
+    {
+        isSuccess = await _cateRepo.Create(Endpoints.CategoriesEndpoint, Model);
+        if (isSuccess)
+        {
+            BackToCategories();
+        }
+       
+    }
+    private void BackToCategories()
+    {
+        _navManager.NavigateTo("/categories");
+    }
+}

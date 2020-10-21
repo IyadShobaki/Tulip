@@ -1,4 +1,4 @@
-﻿@page "/categories"
+﻿@page "/categories/"
 
 @inject ICategoryRepository _cateRepo
 <h3>Category</h3>
@@ -9,33 +9,45 @@
 }
 else
 {
-    <table class="table table-responsive">
-        <thead>
-            <tr>
-                <th>Category Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var category in Model)
-            {
+    <a href="/categories/create" class="btn btn-primary">
+        <span class="oi oi-plus"></span> Create New Category
+    </a>
+    <br />
+    <br />
+    @if (Model.Count < 1)
+    {
+       <InfoMessage Message="There are no records found in the database. Click 'Create New Category' to insert new record" />
+    }
+    else
+    {
+        <table class="table table-responsive">
+            <thead>
                 <tr>
-                    <td>@category.CategoryName</td>
-                    <td>
-                        <a href="/categories/details/@category.Id" class="btn btn-primary">
-                            <span class="oi oi-book"></span>
-                        </a>
-                        <a href="/categories/edit/@category.Id" class="btn btn-warning">
-                            <span class="oi oi-pencil"></span>
-                        </a>
-                        <a href="/categories/delete/@category.Id" class="btn btn-danger">
-                            <span class="oi oi-delete"></span>
-                        </a>
-                    </td>
+                    <th>Category Name</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td>@category.CategoryName</td>
+                        <td>
+                            <a href="/categories/details/@category.Id" class="btn btn-primary">
+                                <span class="oi oi-book"></span>
+                            </a>
+                            <a href="/categories/edit/@category.Id" class="btn btn-warning">
+                                <span class="oi oi-pencil"></span>
+                            </a>
+                            <a href="/categories/delete/@category.Id" class="btn btn-danger">
+                                <span class="oi oi-delete"></span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 }
 @code {
     private IList<Category> Model;

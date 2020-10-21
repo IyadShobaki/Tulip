@@ -4,7 +4,7 @@
 @inject NavigationManager _navManager
 
 <h3>Edit Category</h3>
-@if (isFailed)
+@if (!isSuccess)
 {
     <ErrorMessage Message="Something went wrong with editing attempt" />
 }
@@ -37,7 +37,7 @@ else
     public int Id { get; set; }
 
     private Category Model = new Category();
-    private bool isFailed = false;
+    private bool isSuccess = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -46,14 +46,10 @@ else
 
     private async Task EditCategory()
     {
-        bool isSuccess = await _cateRepo.Update(Endpoints.CategoriesEndpoint, Model, Model.Id);
+        isSuccess = await _cateRepo.Update(Endpoints.CategoriesEndpoint, Model, Model.Id);
         if (isSuccess)
         {
             BackToCategories();
-        }
-        else
-        {
-            isFailed = true;
         }
     }
     private void BackToCategories()

@@ -29,7 +29,8 @@ namespace Tulip_BlazorUI.Service
             {
                 return false;
             }
-            request.Content = new StringContent(JsonConvert.SerializeObject(obj));
+            request.Content = new StringContent(JsonConvert.SerializeObject(obj),
+                Encoding.UTF8, "application/json");
             var client = _client.CreateClient();
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("bearer", await GetBearerToken());
