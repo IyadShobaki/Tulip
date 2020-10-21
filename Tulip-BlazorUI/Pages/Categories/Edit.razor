@@ -6,9 +6,7 @@
 <h3>Edit Category</h3>
 @if (isFailed)
 {
-    <div class="alert alert-danger">
-        <p>Something went wrong with editing attempt</p>
-    </div>
+    <ErrorMessage Message="Something went wrong with editing attempt" />
 }
 
 @if (Model == null)

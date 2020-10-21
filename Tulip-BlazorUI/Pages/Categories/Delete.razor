@@ -1,9 +1,13 @@
-﻿@page "/categories/details/{Id:int}"
+﻿@page "/categories/delete/{Id:int}"
 
 @inject ICategoryRepository _cateRepo
 @inject NavigationManager _navManager
 
-<h3>Category Details</h3>
+<h3>Are you sure you want to delete this category and all products assocaited with it?</h3>
+@if (isFailed)
+{
+    <ErrorMessage Message="Something went wrong with deleting attempt" />
+}
 
 @if (Model == null)
 {
@@ -41,6 +45,10 @@ else
     </div>
 }
 <br />
+<button class="btn btn-danger" @onclick="DeleteCategory">
+    <span class="oi oi-delete"></span> Delete Category
+</button>
+
 <button class="btn btn-outline-secondary" @onclick="BackToCategories">
     <span class="oi oi-media-skip-backward"></span> Back To Categories
 </button>
@@ -50,14 +58,30 @@ else
     public int Id { get; set; }
 
     private Category Model = new Category();
+    private bool isFailed = false;
 
     protected override async Task OnInitializedAsync()
     {
         Model = await _cateRepo.Get(Endpoints.CategoriesEndpoint, Id);
     }
+
+    private async Task DeleteCategory()
+    {
+        //TODO - Delete all products first under this category
+
+        bool isSuccess = await _cateRepo.Delete(Endpoints.CategoriesEndpoint, Model.Id);
+        if (isSuccess)
+        {
+            BackToCategories();
+        }
+        else
+        {
+            isFailed = true;
+        }
+    }
     private void BackToCategories()
     {
         _navManager.NavigateTo("/categories");
     }
-
 }
+
