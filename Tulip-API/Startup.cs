@@ -100,7 +100,13 @@ namespace Tulip_API
 
             // change from AddRazorPages to AddControllers - Iyad
             //services.AddRazorPages();
-            services.AddControllers();
+            //services.AddControllers();
+            // After installing 'Microsoft.AspNetCore.Mvc.NewtonsoftJson' package
+            // to include related records (example -> Category and its products)
+            services.AddControllers().AddNewtonsoftJson(options =>
+            
+                options.SerializerSettings.ReferenceLoopHandling
+                = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

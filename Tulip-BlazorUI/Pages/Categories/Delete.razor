@@ -18,7 +18,7 @@
 }
 else
 {
-    <div class="col-md-4">
+    <div class="col-md-12">
         <h4>Category Details</h4>
         <table class="table table-responsive">
             <tr>
@@ -48,43 +48,48 @@ else
     </div>
 }
 <br />
-<button class="btn btn-danger" @onclick="DeleteCategory">
-    <span class="oi oi-delete"></span> Delete Category
-</button>
+<div class="row justify-content-center align-items-center">
+    <div class="col-6">
+        <button class="btn btn-outline-secondary col-6" @onclick="BackToCategories">
+            <span class="oi oi-media-skip-backward"></span> Back To Categories
+        </button>
+    </div>
+    <div class="col-6">
+        <button class="btn btn-danger" @onclick="DeleteCategory">
+            <span class="oi oi-delete"></span> Delete Category
+        </button>
+    </div>
+</div>
 
-<button class="btn btn-outline-secondary" @onclick="BackToCategories">
-    <span class="oi oi-media-skip-backward"></span> Back To Categories
-</button>
+    @code {
+        [Parameter]
+        public int Id { get; set; }
 
-@code {
-    [Parameter]
-    public int Id { get; set; }
+        private Category Model = new Category();
+        private bool isFailed = false;
 
-    private Category Model = new Category();
-    private bool isFailed = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        Model = await _cateRepo.Get(Endpoints.CategoriesEndpoint, Id);
-    }
-
-    private async Task DeleteCategory()
-    {
-        //TODO - Delete all products first under this category
-
-        bool isSuccess = await _cateRepo.Delete(Endpoints.CategoriesEndpoint, Model.Id);
-        if (isSuccess)
+        protected override async Task OnInitializedAsync()
         {
-            BackToCategories();
+            Model = await _cateRepo.Get(Endpoints.CategoriesEndpoint, Id);
         }
-        else
+
+        private async Task DeleteCategory()
         {
-            isFailed = true;
+            //TODO - Delete all products first under this category
+
+            bool isSuccess = await _cateRepo.Delete(Endpoints.CategoriesEndpoint, Model.Id);
+            if (isSuccess)
+            {
+                BackToCategories();
+            }
+            else
+            {
+                isFailed = true;
+            }
+        }
+        private void BackToCategories()
+        {
+            _navManager.NavigateTo("/categories");
         }
     }
-    private void BackToCategories()
-    {
-        _navManager.NavigateTo("/categories");
-    }
-}
 

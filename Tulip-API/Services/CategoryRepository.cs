@@ -31,13 +31,18 @@ namespace Tulip_API.Services
 
         public async Task<IList<Category>> FindAll()
         {
-            var inventories = await _db.Categories.ToListAsync();
+            var inventories = await _db.Categories
+                .Include(p => p.Products)
+                .ToListAsync();
             return inventories;
         }
 
         public async Task<Category> FindById(int id)
         {
-            var inventory = await _db.Categories.FindAsync(id);
+            var inventory = await _db.Categories
+                .Include(p => p.Products)
+                //.FindAsync(id);
+                .FirstOrDefaultAsync(p => p.Id == id);
             return inventory;
         }
 
