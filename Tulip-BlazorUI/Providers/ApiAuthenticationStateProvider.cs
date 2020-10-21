@@ -32,7 +32,7 @@ namespace Tulip_BlazorUI.Providers
                 }
                 var tokenContent = _tokenHandler.ReadJwtToken(savedToken);
                 var expiry = tokenContent.ValidTo;
-                if (expiry < DateTime.Now)
+                if (expiry < DateTime.UtcNow)
                 {
                     await _localStorage.RemoveItemAsync("authToken");
                     return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));

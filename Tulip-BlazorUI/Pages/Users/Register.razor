@@ -2,14 +2,20 @@
 @inject IAuthenticationRepository _authRepo
 @inject NavigationManager _navManager
 
-<div class="card">
-    <h3 class="card-title">Register Now</h3>
-    @if (!response)
-    {
-        <div class="alert alert-danger">
-            <p>Something went wrong with the registration attempt</p>
-        </div>
-    }
+<h3 class="card-title text-center">Register Now</h3>
+<br />
+<hr />
+<br />
+@if (isFailed)
+{
+    <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
+}
+@if (isProcess)
+{
+    <LoadingMessage/>
+}
+else
+{
     <div class="card-body">
         <EditForm Model="Model" OnValidSubmit="HandleRegistration">
             <DataAnnotationsValidator />
@@ -32,18 +38,25 @@
             <button type="submit" class="btn btn-primary btn-block">Register</button>
         </EditForm>
     </div>
-</div>
+}
 
 @code {
     private RegistrationModel Model = new RegistrationModel();
-    private bool response = true;
+    private bool isFailed = false;
+    private bool isProcess = false;
 
     private async Task HandleRegistration()
     {
+        isProcess = true;
         var response = await _authRepo.Register(Model);
         if (response)
         {
             _navManager.NavigateTo("/login");
+        }
+        else
+        {
+            isFailed = true;
+            isProcess = false;
         }
     }
 }

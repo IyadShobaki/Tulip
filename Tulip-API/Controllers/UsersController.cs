@@ -119,7 +119,7 @@ namespace Tulip_API.Controllers
                 _config["Jwt:Issuer"],
                 claims,
                 null,
-                expires: DateTime.Now.AddMinutes(5),
+                expires: DateTime.Now.AddHours(5),
                 signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

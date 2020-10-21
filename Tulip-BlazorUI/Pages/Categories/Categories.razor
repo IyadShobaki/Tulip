@@ -1,11 +1,14 @@
 ﻿@page "/categories/"
-
+@attribute [Authorize(Roles = "Administrator")]
 @inject ICategoryRepository _cateRepo
-<h3>Category</h3>
 
+<h3 class="card-title text-center">Categories</h3>
+<br />
+<hr />
+<br />
 @if (Model == null)
 {
-    <LoadingMessage Message="Loading Categories Data..." />
+    <LoadingMessage />
 }
 else
 {
@@ -16,7 +19,7 @@ else
     <br />
     @if (Model.Count < 1)
     {
-       <InfoMessage Message="There are no records found in the database. Click 'Create New Category' to insert new record" />
+        <InfoMessage Message="There are no records found in the database. Click 'Create New Category' to insert new record" />
     }
     else
     {

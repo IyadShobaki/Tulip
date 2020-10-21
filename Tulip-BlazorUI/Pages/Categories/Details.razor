@@ -1,13 +1,15 @@
 ﻿@page "/categories/details/{Id:int}"
-
+@attribute [Authorize(Roles = "Administrator")]
 @inject ICategoryRepository _cateRepo
 @inject NavigationManager _navManager
 
-<h3>Category Details</h3>
-
+<h3 class="card-title text-center">Category Details</h3>
+<br />
+<hr />
+<br />
 @if (Model == null)
 {
-    <LoadingMessage Message="Loading Category Data..." />
+    <LoadingMessage/>
 }
 else
 {

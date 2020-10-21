@@ -1,17 +1,20 @@
 ﻿@page "/categories/edit/{Id:int}"
-
+@attribute [Authorize(Roles = "Administrator")]
 @inject ICategoryRepository _cateRepo
 @inject NavigationManager _navManager
 
-<h3>Edit Category</h3>
+<h3 class="card-title text-center">Edit Category</h3>
+<br/>
+<hr />
+<br />
 @if (!isSuccess)
 {
-    <ErrorMessage Message="Something went wrong with editing attempt" />
+    <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
 }
 
 @if (Model == null)
 {
-    <LoadingMessage Message="Loading Category Data..." />
+    <LoadingMessage />
 }
 else
 {
@@ -24,7 +27,7 @@ else
             <InputText @bind-Value="Model.CategoryName" class="form-control" id="categoryname" />
         </div>
         <button class="btn btn-primary" type="submit">
-            <span class="oi oi-pencil"></span>Submit Changes
+            <span class="oi oi-pencil"></span> Submit Changes
         </button>
         <button class="btn btn-outline-secondary" @onclick="BackToCategories">
             <span class="oi oi-media-skip-backward"></span> Back To Categories

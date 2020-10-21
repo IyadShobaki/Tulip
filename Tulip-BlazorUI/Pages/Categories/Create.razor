@@ -1,13 +1,15 @@
 ﻿@page "/categories/create"
-
+@attribute [Authorize(Roles = "Administrator")]
 @inject ICategoryRepository _cateRepo
 @inject NavigationManager _navManager
 
-<h3>Create New Category</h3>
-
+<h3 class="card-title text-center">Create New Category</h3>
+<br />
+<hr />
+<br />
 @if (!isSuccess)
 {
-    <ErrorMessage Message="Something went wrong with creating attempt" />
+    <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
 }
 
 <EditForm Model="Model" OnValidSubmit="CreateCategory">
@@ -19,7 +21,7 @@
         <InputText @bind-Value="Model.CategoryName" class="form-control" id="categoryname" />
     </div>
     <button class="btn btn-primary" type="submit">
-        <span class="oi oi-pencil"></span>Create Category
+        <span class="oi oi-pencil"></span> Create Category
     </button>
     <button class="btn btn-outline-secondary" @onclick="BackToCategories">
         <span class="oi oi-media-skip-backward"></span> Back To Categories
@@ -37,7 +39,7 @@
         {
             BackToCategories();
         }
-       
+
     }
     private void BackToCategories()
     {
