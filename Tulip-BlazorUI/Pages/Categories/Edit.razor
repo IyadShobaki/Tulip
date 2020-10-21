@@ -1,0 +1,65 @@
+﻿@page "/categories/edit/{Id:int}"
+
+@inject ICategoryRepository _cateRepo
+@inject NavigationManager _navManager
+
+<h3>Edit Category</h3>
+@if (isFailed)
+{
+    <div class="alert alert-danger">
+        <p>Something went wrong with editing attempt</p>
+    </div>
+}
+
+@if (Model == null)
+{
+    <LoadingMessage Message="Loading Category Data..." />
+}
+else
+{
+    <EditForm Model="Model" OnValidSubmit="EditCategory">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="categoryname">Category Name</label>
+            <InputText @bind-Value="Model.CategoryName" class="form-control" id="categoryname" />
+        </div>
+        <button class="btn btn-primary" type="submit">
+            <span class="oi oi-pencil"></span>Submit Changes
+        </button>
+        <button class="btn btn-outline-secondary" @onclick="BackToCategories">
+            <span class="oi oi-media-skip-backward"></span> Back To Categories
+        </button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Category Model = new Category();
+    private bool isFailed = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await _cateRepo.Get(Endpoints.CategoriesEndpoint, Id);
+    }
+
+    private async Task EditCategory()
+    {
+        bool isSuccess = await _cateRepo.Update(Endpoints.CategoriesEndpoint, Model, Model.Id);
+        if (isSuccess)
+        {
+            BackToCategories();
+        }
+        else
+        {
+            isFailed = true;
+        }
+    }
+    private void BackToCategories()
+    {
+        _navManager.NavigateTo("/categories");
+    }
+}

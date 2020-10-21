@@ -5,9 +5,7 @@
 
 @if (Model == null)
 {
-    <div class="alert alert-dismissible alert-dark">
-        Loading Data...
-    </div>
+    <LoadingMessage Message="Loading Categories Data..." />
 }
 else
 {
@@ -27,7 +25,7 @@ else
                         <a href="/categories/details/@category.Id" class="btn btn-primary">
                             <span class="oi oi-book"></span>
                         </a>
-                        <a class="btn btn-warning">
+                        <a href="/categories/edit/@category.Id" class="btn btn-warning">
                             <span class="oi oi-pencil"></span>
                         </a>
                         <a class="btn btn-danger">

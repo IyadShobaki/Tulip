@@ -3,45 +3,42 @@
 @inject ICategoryRepository _cateRepo
 @inject NavigationManager _navManager
 
-<h3>Details</h3>
+<h3>Category Details</h3>
+
 @if (Model == null)
 {
-    <div class="alert alert-dismissible alert-dark">
-        Loading Data...
-    </div>
+    <LoadingMessage Message="Loading Category Data..."/>
 }
 else
 {
-    <div class="col-md-4">
-        <h4>Category Details</h4>
-        <table class="table table-responsive">
-            <tr>
-                <td>Category Name</td>
-                <td>@Model.CategoryName</td>
-            </tr>
-        </table>
-        @if (Model.Products == null || Model.Products.Count < 1)
-        {
-            <div class="alert alert-dismissible alert-dark">
-                No Products under this category
+<div class="col-md-4">
+    <h4>Category Details</h4>
+    <table class="table table-responsive">
+        <tr>
+            <td>Category Name</td>
+            <td>@Model.CategoryName</td>
+        </tr>
+    </table>
+    @if (Model.Products == null || Model.Products.Count < 1)
+    {
+        <LoadingMessage Message="No Products under this category" />
+    }
+    else
+    {
+        <div class="card" style="width:18rem;">
+            <div class="card-header">
+                <h4>Category's Products</h4>
             </div>
-        }
-        else
-        {
-            <div class="card" style="width:18rem;">
-                <div class="card-header">
-                    <h4>Category's Products</h4>
-                </div>
-                <ul class="list-group list-group-flush">
-                    @foreach (var product in Model.Products)
-                    {
-                        <li class="list-group-item">@product.ProductName</li>
-                    }
-                </ul>
-            </div>
-        }
+            <ul class="list-group list-group-flush">
+                @foreach (var product in Model.Products)
+                {
+                    <li class="list-group-item">@product.ProductName</li>
+                }
+            </ul>
+        </div>
+    }
 
-    </div>
+</div>
 }
 <br/>
 <button class="btn btn-outline-secondary" @onclick="BackToCategories">
