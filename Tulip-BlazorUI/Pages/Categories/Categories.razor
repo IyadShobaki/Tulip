@@ -1,0 +1,49 @@
+﻿@page "/categories"
+
+@inject ICategoryRepository _cateRepo
+<h3>Category</h3>
+
+@if (Model == null)
+{
+    <div class="alert alert-dismissible alert-dark">
+        Loading Data...
+    </div>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model)
+            {
+                <tr>
+                    <td>@category.CategoryName</td>
+                    <td>
+                        <button class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </button>
+                        <button class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </button>
+                        <button class="btn btn-danger">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    private IList<Category> Model;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Model = await _cateRepo.Get(Endpoints.CategoriesEndpoint);
+    }
+}

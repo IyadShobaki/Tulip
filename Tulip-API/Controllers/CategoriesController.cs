@@ -17,7 +17,7 @@ namespace Tulip_API.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Administrator")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public class CategoriesController : ControllerBase
     {
@@ -36,6 +36,7 @@ namespace Tulip_API.Controllers
         /// </summary>
         /// <returns>List of Categories</returns>
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCategories()
@@ -62,6 +63,7 @@ namespace Tulip_API.Controllers
         /// <param name="id"></param>
         /// <returns>An Category's record</returns>
         [HttpGet("{id}")]
+        [Authorize(Roles = "Administrator")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -92,6 +94,7 @@ namespace Tulip_API.Controllers
         /// <param name="categoryDTO"></param>
         /// <returns>The record that has been inserted</returns>
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -133,6 +136,7 @@ namespace Tulip_API.Controllers
         /// <param name="categoryDTO"></param>
         /// <returns>No content to return</returns>        
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -180,6 +184,7 @@ namespace Tulip_API.Controllers
         /// <param name="id"></param>
         /// <returns>No content to return</returns>        
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

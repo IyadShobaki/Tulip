@@ -11,7 +11,7 @@ namespace Tulip_API.DTOs
     {
         public int Id { get; set; }
         public string CategoryName { get; set; }
-        public virtual IList<Product> Products { get; set; }
+        public virtual IList<ProductDTO> Products { get; set; }
     }
 
     public class CategoryCreateDTO
