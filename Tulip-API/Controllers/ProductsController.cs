@@ -63,6 +63,7 @@ namespace Tulip_API.Controllers
         /// <param name="id"></param>
         /// <returns>An Product's record</returns>
         [HttpGet("{id}")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

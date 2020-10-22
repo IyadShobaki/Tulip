@@ -1,7 +1,6 @@
 ﻿@page "/categories/details/{Id:int}"
 @attribute [Authorize(Roles = "Administrator")]
 @inject ICategoryRepository _cateRepo
-@inject NavigationManager _navManager
 
 <h3 class="card-title text-center">Category Details</h3>
 <br />
@@ -43,23 +42,19 @@ else
     </div>
 }
 <br />
-<button class="btn btn-outline-secondary" @onclick="BackToCategories">
+<a href="/categories" class="btn btn-outline-secondary">
     <span class="oi oi-media-skip-backward"></span> Back To Categories
-</button>
+</a>
 
 @code {
     [Parameter]
     public int Id { get; set; }
 
-    private Category Model = new Category();
+    private Category Model;
 
     protected override async Task OnInitializedAsync()
     {
         Model = await _cateRepo.Get(Endpoints.CategoriesEndpoint, Id);
-    }
-    private void BackToCategories()
-    {
-        _navManager.NavigateTo("/categories");
     }
 
 }

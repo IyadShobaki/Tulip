@@ -1,14 +1,14 @@
 ﻿
     <div class="card" style="width:400px;">
         <a href="@Product.ProductImage" target="_blank">
-            <img src="@Product.ProductImage" class="card-img-top" alt="@Product.ProductName"
+            <img src="images/@Product.ProductImage" class="card-img-top" alt="@Product.ProductImage"
                  style="width: 400px; height: 300px; object-fit: contain; text-align: center;">
         </a>
         <div class="card-body text-center">
             <h5 class="card-title"><strong>@(string.Format("{0:C}", Product.RetailPrice))</strong></h5>
-            <p class="card-text">@Product.Description</p>
+            <p class="card-text">@Product.ProductName</p>
             <p class="card-text"><small class="text-muted">@Product.QuantityInStock left in stock</small></p>
-            <p class="card-text">Category - @Product.Category.CategoryName</p>
+            <p class="card-text"><small class="text-muted">Category - @Product.Category.CategoryName</small></p>
             @*<div class="row">
                     <div class="col">
                         @if (quantityAmount == false)

@@ -1,0 +1,52 @@
+﻿@page "/products/details/{Id:int}"
+@inject IProductRepository _prodRepo
+
+<h3 class="card-title text-center">Product Details</h3>
+<br />
+<hr />
+<br />
+@if (Model == null)
+{
+    <LoadingMessage />
+}
+else
+{
+    <div class="row">
+        <div class="col-6">
+            <table class="table table-responsive">
+                <tr>
+                    <td>
+                        <strong>Product Name</strong>
+                    </td>
+                    <td>@Model.ProductName</td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Description</strong>
+                    </td>
+                    <td>@Model.Description</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-4">
+            <img src="images/@Model.ProductImage" style="height:300px; width:300px"/>
+            <h3 class="text-center text-info">@Model.RetailPrice</h3>
+        </div>
+    </div>
+}
+<a href="/" class="btn btn-outline-secondary">
+    <span class="oi oi-media-skip-backward"></span> Back To Home
+</a>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Product Model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await _prodRepo.Get(Endpoints.ProductsEndpoint, Id);
+    }
+
+}
