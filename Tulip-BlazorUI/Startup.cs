@@ -41,6 +41,7 @@ namespace Tulip_BlazorUI
             services.AddScoped<JwtSecurityTokenHandler>(); // -- Iyad
             services.AddTransient<IAuthenticationRepository, AuthenticationRepository>(); // -- Iyad 
             services.AddTransient<ICategoryRepository, CategoryRepository>(); // -- Iyad 
+            services.AddTransient<IProductRepository, ProductRepository>(); // -- Iyad 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
