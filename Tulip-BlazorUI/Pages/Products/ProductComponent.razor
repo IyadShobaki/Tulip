@@ -1,61 +1,65 @@
-﻿<div class="card" style="width:400px;">
-    <a href="@Product.ProductImage" target="_blank">
-        <img src="@Product.ProductImage" class="card-img-top" alt="@Product.ProductName"
-             style="width: 400px; height: 300px; object-fit: contain; text-align: center;">
-    </a>
-    <div class="card-body text-center">
-        <h5 class="card-title"><strong>@(string.Format("{0:C}", Product.RetailPrice))</strong></h5>
-        <p class="card-text">@Product.Description</p>
-        <p class="card-text"><small class="text-muted">@Product.QuantityInStock left in stock</small></p>
-        @*<div class="row">
-                <div class="col">
-                    @if (quantityAmount == false)
-                    {
-                        <small>Quantity (1 - Quantity In Stock)</small>
-                    }
-                    <input type="number" min="1" max="@Product.QuantityInStock"
-                           style="width:50%; text-align:center; margin-bottom:20px" @bind-value="Quantity" />
+﻿
+    <div class="card" style="width:400px;">
+        <a href="@Product.ProductImage" target="_blank">
+            <img src="@Product.ProductImage" class="card-img-top" alt="@Product.ProductName"
+                 style="width: 400px; height: 300px; object-fit: contain; text-align: center;">
+        </a>
+        <div class="card-body text-center">
+            <h5 class="card-title"><strong>@(string.Format("{0:C}", Product.RetailPrice))</strong></h5>
+            <p class="card-text">@Product.Description</p>
+            <p class="card-text"><small class="text-muted">@Product.QuantityInStock left in stock</small></p>
+            <p class="card-text">Category - @Product.Category.CategoryName</p>
+            @*<div class="row">
+                    <div class="col">
+                        @if (quantityAmount == false)
+                        {
+                            <small>Quantity (1 - Quantity In Stock)</small>
+                        }
+                        <input type="number" min="1" max="@Product.QuantityInStock"
+                               style="width:50%; text-align:center; margin-bottom:20px" @bind-value="Quantity" />
+                    </div>
+                </div>*@
+            <div class="btn-toolbar justify-content-center" role="toolbar">
+                <div class="btn-group mr-3" role="group">
+                    <a href="/products/details/@Product.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
                 </div>
-            </div>*@
-        <AuthorizeView Roles="Administrator">
-            <Authorized>
-                <div class="btn-toolbar justify-content-center" role="toolbar">
-                    <div class="btn-group mr-3" role="group">
-                        <a href="/products/details/@Product.Id" class="btn btn-primary">
-                            <span class="oi oi-book"></span>
-                        </a>
-                    </div>
-                    <div class="btn-group mr-3" role="group">
-                        <a href="/products/edit/@Product.Id" class="btn btn-warning">
-                            <span class="oi oi-pencil"></span>
-                        </a>
-                    </div>
-                    <div class="btn-group mr-3" role="group">
-                        <a href="/products/delete/@Product.Id" class="btn btn-danger">
-                            <span class="oi oi-delete"></span>
-                        </a>
-                    </div>
-                </div>
-            </Authorized>
-            <NotAuthorized>
-                <div class="btn-toolbar justify-content-center" role="toolbar">
-                    <div class="btn-group mr-3" role="group">
-                        <button type="button" class="btn btn-primary">
-                            <span class="oi oi-minus"></span>
-                        </button>
-                    </div>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary">
-                            <span class="oi oi-plus"></span>
-                        </button>
-                    </div>
-                </div>
-            </NotAuthorized>
-        </AuthorizeView>
+                <AuthorizeView Roles="Administrator">
+                    <Authorized>
+                        <div class="btn-group mr-3" role="group">
+                            <a href="/products/edit/@Product.Id" class="btn btn-warning">
+                                <span class="oi oi-pencil"></span>
+                            </a>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <a href="/products/delete/@Product.Id" class="btn btn-danger">
+                                <span class="oi oi-delete"></span>
+                            </a>
+                        </div>
+                    </Authorized>
+                    <NotAuthorized>
+                        <div class="btn-group mr-3" role="group">
+                            <button type="button" class="btn btn-primary">
+                                <span class="oi oi-minus"></span>
+                            </button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-primary">
+                                <span class="oi oi-plus"></span>
+                            </button>
+                        </div>
 
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+        </div>
     </div>
-</div>
+
+
+
 @code {
     [Parameter]
     public Product Product { get; set; }
+
 }

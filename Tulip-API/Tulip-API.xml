@@ -44,24 +44,6 @@
             <param name="id"></param>
             <returns>No content to return</returns>        
         </member>
-        <member name="T:Tulip_API.Controllers.HomeController">
-            <summary>
-            This is test API controller
-            </summary>
-        </member>
-        <member name="M:Tulip_API.Controllers.HomeController.Get">
-            <summary>
-            Gets values
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Tulip_API.Controllers.HomeController.Get(System.Int32)">
-            <summary>
-            Gets a value
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
         <member name="T:Tulip_API.Controllers.ProductsController">
             <summary>
             Endpoint used to interact with the Products in the Tulip Clothing Store's database

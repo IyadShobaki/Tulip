@@ -41,17 +41,24 @@ else
     </AuthorizeView>
     @if (Model.Count < 1)
     {
-        <InfoMessage Message="There are no records found in the database. Click 'Add New Product' to insert new record" />
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+                <InfoMessage Message="There are no records found in the database. Click 'Add New Product' to insert new record" />
+            </Authorized>
+            <NotAuthorized>
+                <InfoMessage Message="New products coming soon..." />
+            </NotAuthorized>
+        </AuthorizeView>
     }
     else
     {
-      
+
         <div class="row">
-                @foreach (var product in Model)
-                {
-                    <ProductComponent Product="@product" />
-                }
-            </div>
+            @foreach (var product in Model)
+            {
+                <ProductComponent Product="@product" />
+            }
+        </div>
     }
 }
 
@@ -64,6 +71,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         Model = await _prodRepo.Get(Endpoints.ProductsEndpoint);
-        
+
     }
 }

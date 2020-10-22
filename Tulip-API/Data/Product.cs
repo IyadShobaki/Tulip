@@ -10,6 +10,7 @@ namespace Tulip_API.Data
         public string ProductName { get; set; }
         public string Description { get; set; }
         public string ProductImage { get; set; }
+        [Column(TypeName = "decimal(18,2)")] // fix for Microsoft.EntityFrameworkCore.Model.Validation[30000]
         public decimal RetailPrice { get; set; }
         public int QuantityInStock { get; set; }
         public DateTime CreatedDate { get; set; }
