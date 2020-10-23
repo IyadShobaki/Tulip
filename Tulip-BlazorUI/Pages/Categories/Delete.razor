@@ -3,7 +3,7 @@
 @inject ICategoryRepository _cateRepo
 @inject NavigationManager _navManager
 
-<h3 class="card-title text-center">Delete Category@*Are you sure you want to delete this category and all products assocaited with it?*@</h3>
+<h3 class="card-title text-center">Delete Category</h3>
 <br />
 <hr />
 <br />
@@ -55,6 +55,9 @@ else
     <span class="oi oi-delete"></span> Delete Category
 </button>
 
+<ConfirmComponent @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+                  Message="@($"Are you sure you want to delete \"{Model.CategoryName}\" category? This process will delete all products under this category.")"/>
+
 @code {
     [Parameter]
     public int Id { get; set; }
@@ -62,19 +65,26 @@ else
     private Category Model = new Category();
     private bool isSuccess = true;
 
+    public ConfirmComponent DeleteConfirmation { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         Model = await _cateRepo.Get(Endpoints.CategoriesEndpoint, Id);
     }
 
-    private async Task DeleteCategory()
+    private void DeleteCategory()
     {
-        //TODO - Delete all products first under this category
-
-        isSuccess = await _cateRepo.Delete(Endpoints.CategoriesEndpoint, Model.Id);
-        if (isSuccess)
+        DeleteConfirmation.Show();
+    }
+    private async Task ConfirmDelete(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
         {
-            _navManager.NavigateTo("/categories");
+            isSuccess = await _cateRepo.Delete(Endpoints.CategoriesEndpoint, Model.Id);
+            if (isSuccess)
+            {
+                _navManager.NavigateTo("/categories");
+            }
         }
     }
 }

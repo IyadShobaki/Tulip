@@ -56,10 +56,15 @@ else
     <span class="oi oi-delete"></span> Delete Product
 </button>
 
-
+@if (Model != null)
+{
+<ConfirmComponent @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+                  Message="@($"Are you sure you want to delete \"{Model.ProductName}\"?")" />
+}
 @code {
     [Parameter]
     public int Id { get; set; }
+    public ConfirmComponent DeleteConfirmation { get; set; }
 
     private Product Model;
     private bool isSuccess = true;
@@ -68,13 +73,22 @@ else
     {
         Model = await _prodRepo.Get(Endpoints.ProductsEndpoint, Id);
     }
-    private async Task DeleteProduct()
+
+    private void DeleteProduct()
     {
-        _fileUpload.RemoveFile(Model.ProductImage);
-        isSuccess = await _prodRepo.Delete(Endpoints.ProductsEndpoint, Model.Id);
-        if (isSuccess)
+        DeleteConfirmation.Show();
+    }
+
+    private async Task ConfirmDelete(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
         {
-            _navManager.NavigateTo("/");
+            _fileUpload.RemoveFile(Model.ProductImage);
+            isSuccess = await _prodRepo.Delete(Endpoints.ProductsEndpoint, Model.Id);
+            if (isSuccess)
+            {
+                _navManager.NavigateTo("/");
+            }
         }
     }
 }
