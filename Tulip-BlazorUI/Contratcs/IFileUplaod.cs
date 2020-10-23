@@ -10,5 +10,6 @@ namespace Tulip_BlazorUI.Contratcs
     public interface IFileUplaod
     {
         void UploadFile(IFileListEntry file, MemoryStream msFile, string pictureName);
+        void RemoveFile(string picName);
     }
 }

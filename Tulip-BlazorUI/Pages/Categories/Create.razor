@@ -20,11 +20,11 @@
         <label for="categoryname">Category Name</label>
         <InputText @bind-Value="Model.CategoryName" class="form-control" id="categoryname" />
     </div>
+    <a href="categories/" class="btn btn-outline-secondary">
+        <span class="oi oi-media-skip-backward"></span> Categories
+    </a>
     <button class="btn btn-primary" type="submit">
         <span class="oi oi-pencil"></span> Create Category
-    </button>
-    <button class="btn btn-outline-secondary" @onclick="BackToCategories">
-        <span class="oi oi-media-skip-backward"></span> Back To Categories
     </button>
 </EditForm>
 
@@ -37,12 +37,8 @@
         isSuccess = await _cateRepo.Create(Endpoints.CategoriesEndpoint, Model);
         if (isSuccess)
         {
-            BackToCategories();
+            _navManager.NavigateTo("/categories");
         }
 
-    }
-    private void BackToCategories()
-    {
-        _navManager.NavigateTo("/categories");
     }
 }

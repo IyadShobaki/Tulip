@@ -3,18 +3,17 @@
 @inject ICategoryRepository _cateRepo
 @inject NavigationManager _navManager
 
-<h3 class="card-title text-center">Are you sure you want to delete this category and all products assocaited with it?</h3>
+<h3 class="card-title text-center">Delete Category@*Are you sure you want to delete this category and all products assocaited with it?*@</h3>
 <br />
 <hr />
 <br />
-@if (isFailed)
+@if (!isSuccess)
 {
     <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
 }
-
 @if (Model == null)
 {
-    <LoadingMessage/>
+    <LoadingMessage />
 }
 else
 {
@@ -32,7 +31,7 @@ else
         }
         else
         {
-            <div class="card" >
+            <div class="card">
                 <div class="card-header text-white" style="background-color: #00AA9E;">
                     <h4>Category's Products</h4>
                 </div>
@@ -48,49 +47,35 @@ else
     </div>
 }
 <br />
-<div class="container">
-    <div class="row ">
-        <div class="col col-lg-6 text-center">
-            <button class="btn btn-outline-secondary col-6" @onclick="BackToCategories">
-                <span class="oi oi-media-skip-backward"></span> Back To Categories
-            </button>
-        </div>
-        <div class="col col-lg-6 text-center">
-            <button class="btn btn-danger" @onclick="DeleteCategory">
-                <span class="oi oi-delete"></span> Delete Category
-            </button>
-        </div>
-    </div>
-</div>
-    @code {
-        [Parameter]
-        public int Id { get; set; }
 
-        private Category Model = new Category();
-        private bool isFailed = false;
+<a href="categories/" class="btn btn-outline-secondary">
+    <span class="oi oi-media-skip-backward"></span> Categories
+</a>
+<button class="btn btn-danger" @onclick="DeleteCategory">
+    <span class="oi oi-delete"></span> Delete Category
+</button>
 
-        protected override async Task OnInitializedAsync()
-        {
-            Model = await _cateRepo.Get(Endpoints.CategoriesEndpoint, Id);
-        }
+@code {
+    [Parameter]
+    public int Id { get; set; }
 
-        private async Task DeleteCategory()
-        {
-            //TODO - Delete all products first under this category
+    private Category Model = new Category();
+    private bool isSuccess = true;
 
-            bool isSuccess = await _cateRepo.Delete(Endpoints.CategoriesEndpoint, Model.Id);
-            if (isSuccess)
-            {
-                BackToCategories();
-            }
-            else
-            {
-                isFailed = true;
-            }
-        }
-        private void BackToCategories()
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await _cateRepo.Get(Endpoints.CategoriesEndpoint, Id);
+    }
+
+    private async Task DeleteCategory()
+    {
+        //TODO - Delete all products first under this category
+
+        isSuccess = await _cateRepo.Delete(Endpoints.CategoriesEndpoint, Model.Id);
+        if (isSuccess)
         {
             _navManager.NavigateTo("/categories");
         }
     }
+}
 

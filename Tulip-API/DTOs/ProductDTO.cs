@@ -58,6 +58,8 @@ namespace Tulip_API.DTOs
         [Required]
         public int QuantityInStock { get; set; }
         [Required]
+        public DateTime CreatedDate { get; set; }
+        [Required]
         public DateTime UpdatedDate { get; set; }
         [Required]
         public bool IsTaxable { get; set; }

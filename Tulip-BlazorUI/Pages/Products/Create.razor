@@ -5,12 +5,12 @@
 @inject IFileUplaod _fileUpload
 @inject NavigationManager _navManager
 
-@using System.IO
 
 <h3 class="card-title text-center">Create New Product</h3>
 <br />
 <hr />
 <br />
+
 @if (!isSuccess)
 {
     <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
@@ -36,10 +36,11 @@
         <label for="quantityinstock">Quantity In Stock</label>
         <InputNumber @bind-Value="Model.QuantityInStock" class="form-control" id="quantityinstock" />
     </div>
-    <div class="form-group">
-        <label for="istaxable">Is Taxable</label>
-        <InputCheckbox @bind-Value="Model.IsTaxable" class="form-control" id="istaxable" />
+    <div class="form-check">
+        <InputCheckbox @bind-Value="Model.IsTaxable" class="form-check-input" id="istaxable" />
+        <label class="form-check-label" for="istaxable">Is Taxable</label>
     </div>
+    <br/>
     <div class="form-group">
         <label for="category">Category</label>
         <select @bind="Model.CategoryId" class="form-control" id="category">
@@ -66,11 +67,11 @@
         }
     </div>
 
+    <a href="/" class="btn btn-outline-secondary">
+        <span class="oi oi-media-skip-backward"></span> Home
+    </a>
     <button class="btn btn-primary" type="submit">
         <span class="oi oi-pencil"></span> Create Product
-    </button>
-    <button class="btn btn-outline-secondary" @onclick="BackToHome">
-        <span class="oi oi-media-skip-backward"></span> Back To Categories
     </button>
 </EditForm>
 
@@ -86,6 +87,32 @@
     protected override async Task OnInitializedAsync()
     {
         Categories = await _cateRepo.Get(Endpoints.CategoriesEndpoint);
+    }
+
+    private async Task CreateProduct()
+    {
+        if (file != null)
+        {
+            var ext = Path.GetExtension(file.Name);
+            var pictureId = Guid.NewGuid().ToString().Replace("-", "");
+            string randomFileName = Path.GetRandomFileName();
+            string[] pictureRandomName = randomFileName.Split('.');
+            var pictureName = $"{pictureRandomName[0]}{pictureId}{ext}";
+            _fileUpload.UploadFile(file,msFile, pictureName);
+            Model.ProductImage = pictureName;
+
+            Model.CreatedDate = DateTime.Now;
+            Model.UpdatedDate = DateTime.Now;
+            isSuccess = await _prodRepo.Create(Endpoints.ProductsEndpoint, Model);
+            if (isSuccess)
+            {
+                _navManager.NavigateTo("/");
+            }
+        }
+        else
+        {
+            isInvalidFileType = true;
+        }
     }
 
     private async Task HandleFileSelection(IFileListEntry[] files)
@@ -114,38 +141,5 @@
             }
 
         }
-    }
-
-    private async Task CreateProduct()
-    {
-        if (file != null)
-        {
-            var ext = Path.GetExtension(file.Name);
-            var pictureId = Guid.NewGuid().ToString().Replace("-", "");
-            string randomFileName = Path.GetRandomFileName();
-            string[] pictureRandomName = randomFileName.Split('.');
-            var pictureName = $"{pictureRandomName[0]}{pictureId}{ext}";
-            _fileUpload.UploadFile(file,msFile, pictureName);
-            Model.ProductImage = pictureName;
-
-            Model.CreatedDate = DateTime.Now;
-            Model.UpdatedDate = DateTime.Now;
-            isSuccess = await _prodRepo.Create(Endpoints.ProductsEndpoint, Model);
-            if (isSuccess)
-            {
-                BackToHome();
-            }
-        }
-        else
-        {
-            isInvalidFileType = true;
-        }
-
-
-
-    }
-    private void BackToHome()
-    {
-        _navManager.NavigateTo("/");
     }
 }

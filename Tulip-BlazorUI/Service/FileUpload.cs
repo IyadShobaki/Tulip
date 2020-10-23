@@ -17,6 +17,16 @@ namespace Tulip_BlazorUI.Service
         {
             _environment = environment;
         }
+
+        public void RemoveFile(string pictureName)
+        {
+            var path = $"{_environment.WebRootPath}\\images\\{pictureName}";
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+
         public void UploadFile(IFileListEntry file, MemoryStream msFile, string pictureName)
         {
             try

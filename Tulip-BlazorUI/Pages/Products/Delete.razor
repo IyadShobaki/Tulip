@@ -1,10 +1,17 @@
-﻿@page "/products/details/{Id:int}"
+﻿@page "/products/delete/{Id:int}"
+@attribute [Authorize(Roles = "Administrator")]
 @inject IProductRepository _prodRepo
+@inject IFileUplaod _fileUpload
+@inject NavigationManager _navManager
 
-<h3 class="card-title text-center">Product Details</h3>
+<h3 class="card-title text-center">Delete Product</h3>
 <br />
 <hr />
 <br />
+@if (!isSuccess)
+{
+    <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
+}
 @if (Model == null)
 {
     <LoadingMessage />
@@ -35,24 +42,39 @@ else
             </table>
         </div>
         <div class="float-right" style="text-align:center;">
-            <img class="img-fluid"  src="images/@Model.ProductImage" style="height:300px; width:300px" />
+            <img class="img-fluid" src="images/@Model.ProductImage" style="height:300px; width:300px" />
             <h3 class="text-center text-info">@(string.Format("{0:C}", Model.RetailPrice))</h3>
         </div>
     </div>
 }
+<br />
+
 <a href="/" class="btn btn-outline-secondary">
     <span class="oi oi-media-skip-backward"></span> Home
 </a>
+<button class="btn btn-danger" @onclick="DeleteProduct">
+    <span class="oi oi-delete"></span> Delete Product
+</button>
+
 
 @code {
     [Parameter]
     public int Id { get; set; }
 
     private Product Model;
+    private bool isSuccess = true;
 
     protected override async Task OnInitializedAsync()
     {
         Model = await _prodRepo.Get(Endpoints.ProductsEndpoint, Id);
     }
-
+    private async Task DeleteProduct()
+    {
+        _fileUpload.RemoveFile(Model.ProductImage);
+        isSuccess = await _prodRepo.Delete(Endpoints.ProductsEndpoint, Model.Id);
+        if (isSuccess)
+        {
+            _navManager.NavigateTo("/");
+        }
+    }
 }

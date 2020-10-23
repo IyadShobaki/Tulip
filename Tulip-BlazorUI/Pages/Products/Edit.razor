@@ -1,0 +1,173 @@
+﻿@page "/products/edit/{Id:int}"
+@attribute [Authorize(Roles = "Administrator")]
+@inject IProductRepository _prodRepo
+@inject ICategoryRepository _cateRepo
+@inject IFileUplaod _fileUpload
+@inject NavigationManager _navManager
+
+<h3 class="card-title text-center">Edit Product</h3>
+<br />
+<hr />
+<br />
+@if (!isSuccess)
+{
+    <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
+}
+@if (Model == null)
+{
+    <LoadingMessage />
+}
+else
+{
+    <EditForm Model="Model" OnValidSubmit="UpdateProduct">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="productname">Product Name</label>
+            <InputText @bind-Value="Model.ProductName" class="form-control" id="productname" />
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <InputTextArea @bind-Value="Model.Description" class="form-control" id="description" />
+        </div>
+        <div class="form-group">
+            <label for="retailprice">Retail Price</label>
+            <InputNumber @bind-Value="Model.RetailPrice" class="form-control" id="retailprice" />
+        </div>
+        <div class="form-group">
+            <label for="quantityinstock">Quantity In Stock</label>
+            <InputNumber @bind-Value="Model.QuantityInStock" class="form-control" id="quantityinstock" />
+        </div>
+        <div class="form-check">
+            <InputCheckbox @bind-Value="Model.IsTaxable" class="form-check-input" id="istaxable" />
+            <label class="form-check-label" for="istaxable">Is Taxable</label>
+        </div>
+        <br/>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select @bind="Model.CategoryId" class="form-control" id="category">
+                <option value="">-- Select Category --</option>
+                @if (Categories != null)
+                {
+                    foreach (var category in Categories)
+                    {
+                        <option value="@category.Id">@category.CategoryName</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="productimage">Product Image</label>
+            <InputFile OnChange="HandleFileSelection" />
+            @if (isInvalidFileType)
+            {
+                <ErrorMessage Message="Please add an invalid image with 'jpg' or 'jpeg' or 'png' extension." />
+            }
+            @if (!string.IsNullOrWhiteSpace(imageDateURL))
+            {
+                <img src="@imageDateURL" style="height:300px;width:300px;" />
+            }
+            else if (!string.IsNullOrWhiteSpace(Model.ProductImage) && !isInvalidFileType)
+            {
+                <img src="images/@Model.ProductImage" style="height:300px;width:300px;" />
+            }
+        </div>
+
+        <a href="/" class="btn btn-outline-secondary" >
+            <span class="oi oi-media-skip-backward"></span> Home
+        </a>
+        <button class="btn btn-primary" type="submit">
+            <span class="oi oi-pencil"></span> Submit Changes
+        </button>
+    </EditForm>
+
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Product Model;
+    private IList<Category> Categories;
+    private IFileListEntry file;
+    private string imageDateURL;
+    private MemoryStream msFile;
+    private bool isInvalidFileType = false;
+    private bool isSuccess = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await _prodRepo.Get(Endpoints.ProductsEndpoint, Id);
+        Categories = await _cateRepo.Get(Endpoints.CategoriesEndpoint);
+    }
+
+    private async Task UpdateProduct()
+    {
+        if (file != null && !isInvalidFileType)
+        {
+            var ext = Path.GetExtension(file.Name);
+            var pictureId = Guid.NewGuid().ToString().Replace("-", "");
+            string randomFileName = Path.GetRandomFileName();
+            string[] pictureRandomName = randomFileName.Split('.');
+            var pictureName = $"{pictureRandomName[0]}{pictureId}{ext}";
+
+            //Remove old picture
+            _fileUpload.RemoveFile(Model.ProductImage);
+
+            _fileUpload.UploadFile(file, msFile, pictureName);
+            Model.ProductImage = pictureName;
+
+            Model.CreatedDate = Model.CreatedDate;
+            Model.UpdatedDate = DateTime.Now;
+            isSuccess = await _prodRepo.Update(Endpoints.ProductsEndpoint, Model, Model.Id);
+            if (isSuccess)
+            {
+                _navManager.NavigateTo("/");
+            }
+        }
+        else if (!string.IsNullOrWhiteSpace(Model.ProductImage) && file == null)
+        {
+            Model.CreatedDate = Model.CreatedDate;
+            Model.UpdatedDate = DateTime.Now;
+            isSuccess = await _prodRepo.Update(Endpoints.ProductsEndpoint, Model, Model.Id);
+            if (isSuccess)
+            {
+                _navManager.NavigateTo("/");
+            }
+        }
+        else
+        {
+            isInvalidFileType = true;
+        }
+    }
+
+    private async Task HandleFileSelection(IFileListEntry[] files)
+    {
+        file = files.FirstOrDefault();
+        if (file != null)
+        {
+            //var name = file.Name;
+            var ext = Path.GetExtension(file.Name);
+            if (ext.ToLower().Contains("jpg") || ext.ToLower().Contains("png")
+            || ext.ToLower().Contains("jpeg"))
+            {
+                // Store the image in the memory for a preview
+                msFile = new MemoryStream();
+                await file.Data.CopyToAsync(msFile);
+
+                var reader = new StreamReader(file.Data);
+                var imageBase64Data = Convert.ToBase64String(msFile.ToArray());
+                imageDateURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
+                isInvalidFileType = false;
+            }
+            else
+            {
+                isInvalidFileType = true;
+                imageDateURL = string.Empty;
+            }
+
+        }
+    }
+
+}
