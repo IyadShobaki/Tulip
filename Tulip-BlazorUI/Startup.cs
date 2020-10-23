@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
+using Blazored.Toast;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -34,6 +35,7 @@ namespace Tulip_BlazorUI
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddBlazoredLocalStorage(); // -- Iyad
+            services.AddBlazoredToast(); // -- Iyad
             services.AddHttpClient();  // -- Iyad 
             services.AddScoped<ApiAuthenticationStateProvider>(); // -- Iyad
             services.AddScoped<AuthenticationStateProvider>(p =>

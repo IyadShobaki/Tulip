@@ -2,15 +2,16 @@
 @attribute [Authorize(Roles = "Administrator")]
 @inject ICategoryRepository _cateRepo
 @inject NavigationManager _navManager
+@inject IToastService _toastService
 
 <h3 class="card-title text-center">Delete Category</h3>
 <br />
 <hr />
 <br />
-@if (!isSuccess)
+@*@if (!isSuccess)
 {
     <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
-}
+}*@
 @if (Model == null)
 {
     <LoadingMessage />
@@ -52,11 +53,11 @@ else
     <span class="oi oi-media-skip-backward"></span> Categories
 </a>
 <button class="btn btn-danger" @onclick="DeleteCategory">
-    <span class="oi oi-delete"></span> Delete Category
+    <span class="oi oi-circle-x"></span> Delete Category
 </button>
 
 <ConfirmComponent @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
-                  Message="@($"Are you sure you want to delete \"{Model.CategoryName}\" category? This process will delete all products under this category.")"/>
+                  Message="@($"Are you sure you want to delete \"{Model.CategoryName}\" category? This process will delete all products under this category.")" />
 
 @code {
     [Parameter]
@@ -83,7 +84,12 @@ else
             isSuccess = await _cateRepo.Delete(Endpoints.CategoriesEndpoint, Model.Id);
             if (isSuccess)
             {
+                _toastService.ShowSuccess("Record Deleted Successfully");
                 _navManager.NavigateTo("/categories");
+            }
+            else
+            {
+                _toastService.ShowError("An error occurred while processing your request. Please try again!");
             }
         }
     }

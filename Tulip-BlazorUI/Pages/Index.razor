@@ -1,15 +1,6 @@
 ﻿@page "/"
 @inject IProductRepository _prodRepo
 
-<AuthorizeView>
-    <Authorized>
-        <p class="h4">Welcome, @context.User.Identity.Name</p>
-    </Authorized>
-    <NotAuthorized>
-        <p class="h4">Hello, Guest!</p>
-    </NotAuthorized>
-</AuthorizeView>
-
 @if (Model == null)
 {
     <LoadingMessage />

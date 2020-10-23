@@ -3,15 +3,16 @@
 @inject IProductRepository _prodRepo
 @inject IFileUplaod _fileUpload
 @inject NavigationManager _navManager
+@inject IToastService _toastService
 
 <h3 class="card-title text-center">Delete Product</h3>
 <br />
 <hr />
 <br />
-@if (!isSuccess)
-{
-    <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
-}
+@*@if (!isSuccess)
+    {
+        <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
+    }*@
 @if (Model == null)
 {
     <LoadingMessage />
@@ -53,13 +54,13 @@ else
     <span class="oi oi-media-skip-backward"></span> Home
 </a>
 <button class="btn btn-danger" @onclick="DeleteProduct">
-    <span class="oi oi-delete"></span> Delete Product
+    <span class="oi oi-circle-x"></span> Delete Product
 </button>
 
 @if (Model != null)
 {
-<ConfirmComponent @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
-                  Message="@($"Are you sure you want to delete \"{Model.ProductName}\"?")" />
+    <ConfirmComponent @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+                      Message="@($"Are you sure you want to delete \"{Model.ProductName}\"?")" />
 }
 @code {
     [Parameter]
@@ -87,7 +88,12 @@ else
             isSuccess = await _prodRepo.Delete(Endpoints.ProductsEndpoint, Model.Id);
             if (isSuccess)
             {
+                _toastService.ShowSuccess("Record Deleted Successfully");
                 _navManager.NavigateTo("/");
+            }
+            else
+            {
+                _toastService.ShowError("An error occurred while processing your request. Please try again!");
             }
         }
     }

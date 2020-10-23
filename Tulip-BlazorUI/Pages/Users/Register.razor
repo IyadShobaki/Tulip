@@ -1,18 +1,19 @@
 ﻿@page "/Register"
 @inject IAuthenticationRepository _authRepo
 @inject NavigationManager _navManager
+@inject IToastService _toastService
 
 <h3 class="card-title text-center">Register Now</h3>
 <br />
 <hr />
 <br />
-@if (isFailed)
-{
-    <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
-}
+@*@if (isFailed)
+    {
+        <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
+    }*@
 @if (isProcess)
 {
-    <LoadingMessage/>
+    <LoadingMessage />
 }
 else
 {
@@ -42,7 +43,7 @@ else
 
 @code {
     private RegistrationModel Model = new RegistrationModel();
-    private bool isFailed = false;
+    //private bool isFailed = false;
     private bool isProcess = false;
 
     private async Task HandleRegistration()
@@ -51,11 +52,13 @@ else
         var response = await _authRepo.Register(Model);
         if (response)
         {
+            _toastService.ShowSuccess("Congrats! You have been successfully registered");
             _navManager.NavigateTo("/login");
         }
         else
         {
-            isFailed = true;
+            _toastService.ShowError("An error occurred while processing your request. Please try again!");
+            //isFailed = true;
             isProcess = false;
         }
     }

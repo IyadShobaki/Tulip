@@ -2,15 +2,16 @@
 @attribute [Authorize(Roles = "Administrator")]
 @inject ICategoryRepository _cateRepo
 @inject NavigationManager _navManager
+@inject IToastService _toastService
 
 <h3 class="card-title text-center">Edit Category</h3>
-<br/>
+<br />
 <hr />
 <br />
-@if (!isSuccess)
+@*@if (!isSuccess)
 {
     <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
-}
+}*@
 
 @if (Model == null)
 {
@@ -52,7 +53,12 @@ else
         isSuccess = await _cateRepo.Update(Endpoints.CategoriesEndpoint, Model, Model.Id);
         if (isSuccess)
         {
+            _toastService.ShowSuccess("Record Updated Successfully");
             _navManager.NavigateTo("/categories");
+        }
+        else
+        {
+            _toastService.ShowError("An error occurred while processing your request. Please try again!");
         }
     }
 }

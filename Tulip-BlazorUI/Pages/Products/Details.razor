@@ -43,6 +43,17 @@ else
 <a href="/" class="btn btn-outline-secondary">
     <span class="oi oi-media-skip-backward"></span> Home
 </a>
+<AuthorizeView Roles="Administrator">
+    <Authorized>
+        <a href="/products/edit/@Id" class="btn btn-outline-warning">
+            <span class="oi oi-pencil"></span> Edit
+        </a>
+        <a href="/products/delete/@Id" class="btn btn-outline-danger">
+            <span class="oi oi-circle-x"></span> Delete
+        </a>
+    </Authorized>
+</AuthorizeView>
+
 
 @code {
     [Parameter]

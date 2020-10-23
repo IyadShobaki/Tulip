@@ -1,12 +1,22 @@
 ﻿@inherits LayoutComponentBase
 
+<BlazoredToasts/>
+
 <div class="sidebar">
     <NavMenu />
 </div>
 
 <div class="main">
-    <div class="top-row px-4">
-        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+    <br/>
+    <div class="" style="background-color:#00AA9E; height:40px">
+        <AuthorizeView>
+            <Authorized>
+                <p class="h4" style="padding-top:10px">Welcome, @context.User.Identity.Name</p>
+            </Authorized>
+            <NotAuthorized>
+                <p class="h4" style="padding-top:10px">Hello, Guest!</p>
+            </NotAuthorized>
+        </AuthorizeView>
     </div>
 
     <div class="content px-4">

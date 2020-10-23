@@ -8,7 +8,7 @@
 <br />
 @if (Model == null)
 {
-    <LoadingMessage/>
+    <LoadingMessage />
 }
 else
 {
@@ -45,7 +45,12 @@ else
 <a href="/categories" class="btn btn-outline-secondary">
     <span class="oi oi-media-skip-backward"></span> Categories
 </a>
-
+<a href="/categories/edit/@Id" class="btn btn-outline-warning">
+    <span class="oi oi-pencil"></span> Edit
+</a>
+<a href="/categories/delete/@Id" class="btn btn-outline-danger">
+    <span class="oi oi-circle-x"></span> Delete
+</a>
 @code {
     [Parameter]
     public int Id { get; set; }

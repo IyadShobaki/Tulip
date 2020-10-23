@@ -4,6 +4,7 @@
 @inject ICategoryRepository _cateRepo
 @inject IFileUplaod _fileUpload
 @inject NavigationManager _navManager
+@inject IToastService _toastService
 
 
 <h3 class="card-title text-center">Create New Product</h3>
@@ -11,10 +12,10 @@
 <hr />
 <br />
 
-@if (!isSuccess)
-{
-    <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
-}
+@*@if (!isSuccess)
+    {
+        <ErrorMessage Message="An error occurred while processing your request. Please try again!" />
+    }*@
 
 <EditForm Model="Model" OnValidSubmit="CreateProduct">
     <DataAnnotationsValidator />
@@ -40,7 +41,7 @@
         <InputCheckbox @bind-Value="Model.IsTaxable" class="form-check-input" id="istaxable" />
         <label class="form-check-label" for="istaxable">Is Taxable</label>
     </div>
-    <br/>
+    <br />
     <div class="form-group">
         <label for="category">Category</label>
         <select @bind="Model.CategoryId" class="form-control" id="category">
@@ -57,10 +58,10 @@
     <div class="form-group">
         <label for="productimage">Product Image</label>
         <InputFile OnChange="HandleFileSelection" />
-        @if (isInvalidFileType)
+        @*@if (isInvalidFileType)
         {
-            <ErrorMessage Message="Please add an invalid image with 'jpg' or 'jpeg' or 'png' extension." />
-        }
+            <ErrorMessage Message="Please add a valid image with 'jpg' or 'jpeg' or 'png' extension." />
+        }*@
         @if (!string.IsNullOrWhiteSpace(imageDateURL))
         {
             <img src="@imageDateURL" style="height:100px;width:100px;" />
@@ -81,7 +82,7 @@
     private IFileListEntry file;
     private string imageDateURL;
     private MemoryStream msFile;
-    private bool isInvalidFileType = false;
+    private bool isInvalidFileType = true;
     private bool isSuccess = true;
 
     protected override async Task OnInitializedAsync()
@@ -91,14 +92,14 @@
 
     private async Task CreateProduct()
     {
-        if (file != null)
+        if (file != null && isInvalidFileType)
         {
             var ext = Path.GetExtension(file.Name);
             var pictureId = Guid.NewGuid().ToString().Replace("-", "");
             string randomFileName = Path.GetRandomFileName();
             string[] pictureRandomName = randomFileName.Split('.');
             var pictureName = $"{pictureRandomName[0]}{pictureId}{ext}";
-            _fileUpload.UploadFile(file,msFile, pictureName);
+            _fileUpload.UploadFile(file, msFile, pictureName);
             Model.ProductImage = pictureName;
 
             Model.CreatedDate = DateTime.Now;
@@ -106,12 +107,18 @@
             isSuccess = await _prodRepo.Create(Endpoints.ProductsEndpoint, Model);
             if (isSuccess)
             {
+                _toastService.ShowSuccess("Record Inserted Successfully");
                 _navManager.NavigateTo("/");
+            }
+            else
+            {
+                _toastService.ShowError("An error occurred while processing your request. Please try again!");
             }
         }
         else
         {
-            isInvalidFileType = true;
+            _toastService.ShowError("Please add a valid image with 'jpg' or 'jpeg' or 'png' extension.");
+            isInvalidFileType = false;
         }
     }
 
@@ -132,11 +139,12 @@
                 var reader = new StreamReader(file.Data);
                 var imageBase64Data = Convert.ToBase64String(msFile.ToArray());
                 imageDateURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
-                isInvalidFileType = false;
+                isInvalidFileType = true;
             }
             else
             {
-                isInvalidFileType = true;
+                _toastService.ShowError("Please add a valid image with 'jpg' or 'jpeg' or 'png' extension.");
+                isInvalidFileType = false;
                 imageDateURL = string.Empty;
             }
 
